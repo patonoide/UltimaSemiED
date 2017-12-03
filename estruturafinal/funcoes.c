@@ -1,67 +1,80 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 #include"cabecalho.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-
-Grafo *criaGrafo(int v){
-    Grafo *g = (Grafo*) malloc(sizeof(Grafo));
+Grafo *criaGrafo(int v) {
+    Grafo *g = (Grafo*) malloc(sizeof (Grafo));
     g->vertices = v;
-    g->matriz = (int**) malloc(sizeof(int*)*v);
+    g->matriz = (int**) malloc(sizeof (int*)*v);
     int i, j;
-    for(i=0;i<v;i++){
-        g->matriz[i]=(int*) malloc(sizeof(int)*v);
+    for (i = 0; i < v; i++) {
+        g->matriz[i] = (int*) malloc(sizeof (int)*v);
     }
-    for(i=0;i<v;i++){
-        for(j=0;j<v;j++){
-            g->matriz[i][j]=BRANCO;
+    for (i = 0; i < v; i++) {
+        for (j = 0; j < v; j++) {
+            g->matriz[i][j] = BRANCO;
         }
     }
     return g;
 }
 
-Res *criaResultado(int v){
-    Res *r = (Res*) malloc(sizeof(Res));
-    r->cor= (int*) malloc(sizeof(int)*v);
-    r->predecessor= (int*) malloc(sizeof(int)*v);
-    r->distancia= (int*) malloc(sizeof(int)*v);
+Res *criaResultado(int v) {
+    Res *r = (Res*) malloc(sizeof (Res));
+    r->cor = (int*) malloc(sizeof (int)*v);
+    r->predecessor = (int*) malloc(sizeof (int)*v);
+    r->distancia = (int*) malloc(sizeof (int)*v);
     int i;
-    
-    for(i=0;i<v;i++){
-        r->cor[i]=BRANCO;
-        r->predecessor[i]=-1;
-        r->distancia[i]=0;
+
+    for (i = 0; i < v; i++) {
+        r->cor[i] = BRANCO;
+        r->predecessor[i] = -1;
+        r->distancia[i] = 0;
     }
-    
+
     return r;
 }
 
-Res *bfs(Grafo *g, int origem){
+Aresta *criaAresta(Grafo *g){
+    int arestas = 0;
+    int x = 0;
+    printf("Digite o numero de arestas: ");
+    scanf("%d", &arestas);
+    Aresta * aresta = (Aresta *) malloc(arestas * sizeof (Aresta));
+    Aresta * auxa = aresta;
+    while (x < arestas) {
+        printf("Digite o valor do nodo: ");
+        scanf("%d", &aresta->sucessor);
+        printf("Digite o predecessor: ");
+        scanf("%d", &aresta->predecessor);
+        x++;
+        aresta++;
+    }
+    return auxa;
+    
+}
+
+Res *bfs(Grafo *g, int origem) {
     int a; //adjacente
     Res *r = criaResultado(g->vertices);
     r->cor[origem] = CINZA;
     Fila *f = criaFila();
     insereFinal(f, origem);
-    while(f->n != 0){
+    while (f->n != 0) {
         int atual = retiraInicio(f);
-        for(a=0;a<g->vertices;a++){
-            if(g->matriz[atual][a]==1) {
-               
-                if(r->cor[a] == BRANCO){
+        for (a = 0; a < g->vertices; a++) {
+            if (g->matriz[atual][a] == 1) {
+                if (r->cor[a] == BRANCO) {
+
                     r->cor[a] = CINZA;
-                    insereFinal(f,a);
-                    r->predecessor[a]=atual;
-                    r->distancia[a]=1+r->distancia[atual];
+                    insereFinal(f, a);
+                    r->predecessor[a] = atual;
+                    
+                    r->distancia[a] = 1 + r->distancia[atual];
                 }
-               
+
             }
         }
-        r->cor[atual]=PRETO;
+        r->cor[atual] = PRETO;
     }
     return r;
 }

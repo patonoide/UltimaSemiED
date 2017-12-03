@@ -17,6 +17,12 @@ struct resultado{
 };
 typedef struct resultado Res;
 
+struct aresta{
+    int predecessor;
+    int sucessor;
+};
+typedef struct aresta Aresta;
+
 
 struct fila{
     int n;
@@ -32,3 +38,4 @@ int retiraInicio(Fila * f);
 Grafo *criaGrafo(int v);
 Res *bfs(Grafo *g, int origem);
 Res *criaResultado(int v);
+Aresta *criaAresta(Grafo *g);
